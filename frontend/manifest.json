@@ -1,0 +1,18 @@
+{
+  "name": "The Silent Cry Decoder",
+  "short_name": "CryDecoder",
+  "description": "AI-powered baby cry classification and decoder for infant needs.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d0e15",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3209/3209935.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

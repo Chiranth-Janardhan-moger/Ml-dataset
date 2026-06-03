@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Silent Cry Decoder - AI Infant Cry Classifier</title>
+  <meta name="description" content="Research-grade 3-stream feature fusion neural network that decodes why your baby is crying. Hunger, pain, sleepy, discomfort, or burping.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3209/3209935.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#6366f1">
+</head>
+<body>
+  <!-- Background glow layers -->
+  <div class="glow-sphere glow-1"></div>
+  <div class="glow-sphere glow-2"></div>
+  
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo-area">
+        <span class="logo-icon">🍼</span>
+        <h1 id="app-title">The Silent Cry Decoder</h1>
+      </div>
+      <p class="subtitle">AI-Powered Multi-Stream Infant Audio Classification System</p>
+      <span class="badge">Research Model: CNN + BiLSTM + Whisper Fusion</span>
+    </header>
+
+    <main class="dashboard-grid">
+      <!-- Left Column: Inputs -->
+      <section class="card control-panel">
+        <h2 class="card-title">Audio Input Console</h2>
+        <p class="card-desc">Provide a 5-second audio sample of the baby crying to begin analysis.</p>
+        
+        <!-- Tab Navigation -->
+        <div class="tabs">
+          <button id="tab-upload" class="tab-btn active" onclick="switchTab('upload')">Upload File</button>
+          <button id="tab-record" class="tab-btn" onclick="switchTab('record')">Record Live</button>
+        </div>
+
+        <!-- Upload Content -->
+        <div id="panel-upload" class="tab-content active">
+          <div class="dropzone" id="dropzone">
+            <input type="file" id="file-input" accept=".wav,.mp3,.m4a,.ogg,.caf,.3gp" hidden>
+            <div class="dropzone-content">
+              <span class="upload-icon">📁</span>
+              <p>Drag & drop audio or <span class="browse-link">browse files</span></p>
+              <span class="file-info">Supports WAV, MP3, M4A up to 10MB</span>
+            </div>
+          </div>
+          <div class="selected-file-banner" id="selected-file-banner" style="display: none;">
+            <span class="file-name" id="selected-file-name">filename.wav</span>
+            <button class="remove-file-btn" id="remove-file-btn">×</button>
+          </div>
+        </div>
+
+        <!-- Record Content -->
+        <div id="panel-record" class="tab-content">
+          <div class="recorder-container">
+            <div class="recording-visualizer">
+              <div class="visualizer-bar bar-1"></div>
+              <div class="visualizer-bar bar-2"></div>
+              <div class="visualizer-bar bar-3"></div>
+              <div class="visualizer-bar bar-4"></div>
+              <div class="visualizer-bar bar-5"></div>
+              <div class="visualizer-bar bar-6"></div>
+              <div class="visualizer-bar bar-7"></div>
+              <div class="visualizer-bar bar-8"></div>
+            </div>
+            
+            <div class="timer" id="recording-timer">00:00</div>
+            
+            <div class="recorder-controls">
+              <button id="record-btn" class="action-btn record-start">Start Recording</button>
+              <button id="stop-btn" class="action-btn record-stop" disabled>Stop</button>
+            </div>
+            <p class="recorder-status" id="recorder-status">Microphone idle. Click Start.</p>
+          </div>
+        </div>
+
+        <button id="analyze-btn" class="submit-btn" disabled>Decode Cry Signature</button>
+      </section>
+
+      <!-- Right Column: Outputs -->
+      <section class="card results-panel" id="results-panel">
+        <h2 class="card-title">Neural Decoder Output</h2>
+        <div class="empty-state" id="empty-state">
+          <div class="scanner"></div>
+          <span class="empty-icon">📊</span>
+          <p>Awaiting audio input. Provide an audio sample and click "Decode Cry Signature" to trigger model inference.</p>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-state" id="loading-state" style="display: none;">
+          <div class="pulse-loader">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          <h3>Fusing Audio Feature Streams</h3>
+          <p id="loader-message">Processing Spectrograms...</p>
+        </div>
+
+        <!-- Real Results UI -->
+        <div class="results-content" id="results-content" style="display: none;">
+          <div class="primary-prediction-card">
+            <span class="prediction-label">Primary Cry Driver</span>
+            <div class="prediction-value" id="main-prediction">Hunger</div>
+            <div class="prediction-confidence" id="main-confidence">Confidence: 94.8%</div>
+          </div>
+
+          <div class="analysis-breakdown">
+            <h3 class="section-subtitle">Multiclass Distribution</h3>
+            
+            <div class="class-bar-container">
+              <div class="class-info">
+                <span>🍼 Hunger</span>
+                <span id="prob-hunger">0%</span>
+              </div>
+              <div class="bar-bg">
+                <div class="bar-fill fill-hunger" id="fill-hunger" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="class-bar-container">
+              <div class="class-info">
+                <span>🩹 Pain / Colic</span>
+                <span id="prob-pain">0%</span>
+              </div>
+              <div class="bar-bg">
+                <div class="bar-fill fill-pain" id="fill-pain" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="class-bar-container">
+              <div class="class-info">
+                <span>💤 Tired / Sleepy</span>
+                <span id="prob-sleepy">0%</span>
+              </div>
+              <div class="bar-bg">
+                <div class="bar-fill fill-sleepy" id="fill-sleepy" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="class-bar-container">
+              <div class="class-info">
+                <span>🧸 Discomfort</span>
+                <span id="prob-discomfort">0%</span>
+              </div>
+              <div class="bar-bg">
+                <div class="bar-fill fill-discomfort" id="fill-discomfort" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="class-bar-container">
+              <div class="class-info">
+                <span>💨 Burping</span>
+                <span id="prob-burping">0%</span>
+              </div>
+              <div class="bar-bg">
+                <div class="bar-fill fill-burping" id="fill-burping" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fusion Stream Visualization -->
+          <div class="stream-fusion-visualizer">
+            <h3 class="section-subtitle">Stream Contributions</h3>
+            <div class="streams-flex">
+              <div class="stream-bubble" id="bubble-cnn">
+                <span class="stream-icon">🖼️</span>
+                <span class="stream-name">Visual CNN</span>
+                <span class="stream-status active">FUSED (128d)</span>
+              </div>
+              <div class="stream-bubble" id="bubble-lstm">
+                <span class="stream-icon">📈</span>
+                <span class="stream-name">BiLSTM Seq</span>
+                <span class="stream-status active">FUSED (128d)</span>
+              </div>
+              <div class="stream-bubble" id="bubble-whisper">
+                <span class="stream-icon">🎙️</span>
+                <span class="stream-name">Whisper HF</span>
+                <span class="stream-status active">FUSED (128d)</span>
+              </div>
+            </div>
+            <div class="connector-lines">
+              <svg width="100%" height="30">
+                <line x1="16.6%" y1="0" x2="50%" y2="30" stroke="rgba(99, 102, 241, 0.4)" stroke-width="2" />
+                <line x1="50%" y1="0" x2="50%" y2="30" stroke="rgba(99, 102, 241, 0.4)" stroke-width="2" />
+                <line x1="83.3%" y1="0" x2="50%" y2="30" stroke="rgba(99, 102, 241, 0.4)" stroke-width="2" />
+              </svg>
+            </div>
+            <div class="fusion-node">384d Concatenation Tensor</div>
+          </div>
+
+          <!-- Pediatrician Advice Card -->
+          <div class="advice-card">
+            <div class="advice-header">
+              <span class="advice-icon">🩺</span>
+              <h4>Pediatric Care Recommendation</h4>
+            </div>
+            <p id="pediatrician-advice">Pediatric instructions based on prediction will load here.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    
+    <footer class="app-footer">
+      <p>&copy; 2026 The Silent Cry Decoder Project. Powered by PyTorch & FastAPI.</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
