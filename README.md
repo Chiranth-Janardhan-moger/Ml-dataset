@@ -1,4 +1,4 @@
-# The Silent Cry Decoder 🍼
+# The Silent Cry Decoder 
 
 [![Python Version](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/)
 [![PyTorch Version](https://img.shields.io/badge/pytorch-2.8.0-red.svg)](https://pytorch.org/)
@@ -11,7 +11,7 @@ To achieve high generalization and feature robustness, this project implements a
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
 *   **3-Stream Ensemble Neural Network**: Hybrid model combining visual, sequential, and pretrained transformers.
 *   **Aesthetic PWA Web App**: Clean, responsive dark-themed dashboard featuring real-time audio recording via the Web Audio API and offline installation support.
@@ -21,7 +21,7 @@ To achieve high generalization and feature robustness, this project implements a
 
 ---
 
-## 🛠️ Repository Directory Structure
+## ️ Repository Directory Structure
 
 Below is the file tree of the project. Click any file link to view the code directly:
 
@@ -51,7 +51,7 @@ Below is the file tree of the project. Click any file link to view the code dire
 
 ---
 
-## 📊 The 3-Stream Model Architecture
+##  The 3-Stream Model Architecture
 
 This system decodes audio input from three complementary perspectives before predicting a label:
 
@@ -63,7 +63,7 @@ All three embeddings are concatenated into a **384-dimensional joint representat
 
 ---
 
-## 💾 Dataset Details
+##  Dataset Details
 
 The dataset directory is located at [cry-dataset](file:///D:/Antigravity/Ml-project-cry/cry-dataset). It contains user-uploaded baby cry samples categorized into 5 subfolders:
 *   [hungry](file:///D:/Antigravity/Ml-project-cry/cry-dataset/hungry) -> Hunger (`hu`)
@@ -78,7 +78,7 @@ Represents: `app-uuid` - `timestamp` - `app-version` - `gender` - `age-bracket` 
 
 ---
 
-## ⚡ Quick Start Instructions
+##  Quick Start Instructions
 
 ### 1. Setup Environment & Install Dependencies
 Ensure you have Python 3.13+ installed, then run:
