@@ -116,4 +116,4 @@ Open your browser and navigate to `http://localhost:3000`. You can record cries 
 *Note: If the FastAPI server is not running, the web application runs in simulated prediction mode so you can demonstrate the UI flow during interviews.*
 
 <!-- Visitor Radar Telemetry -->
-<img src="https://chiranthmoger.vercel.app/api/telemetry/pixel.svg?target=Silent%20Cry%20Decoder%20Repository" width="1" height="1" alt="" style="display:none;" />
+<img src="https://chiranth.vercel.app/api/telemetry/pixel.svg?target=Silent%20Cry%20Decoder%20Repository" width="1" height="1" alt="" style="display:none;" />
